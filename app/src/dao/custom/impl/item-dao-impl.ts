@@ -94,5 +94,17 @@ export class ItemDaoImpl implements ItemDAO{
                 });
         });
     }
+    count(): Promise<number> {
+        return new Promise((resolve, reject) =>{
+            this.connection.query(`SELECT COUNT(*) as count FROM items `,
+                (error,results)=>{
+                    if (error){
+                        reject(error);
+                    } else {
+                        resolve(results[0].count);
+                    }
+                });
+        } );
+    }
     
 }

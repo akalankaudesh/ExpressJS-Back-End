@@ -3,6 +3,8 @@ import cors=require("cors");
 
 import {CustomerBO} from "../business/customer-bo";
 
+
+
 // This will return a new instance of a router object that can be used to handle routing
 const customerDispatcher = express.Router();
 
@@ -77,16 +79,16 @@ customerDispatcher.route("/:id")
 
     })
     .put((req, res) => {
+        //
+        // if (!("id" in req.body && "name" in req.body && "address" in req.body)){
+        //     res.status(400).send("Invalid Request Body");
+        //     return;
+        // }
 
-        if (!("id" in req.body && "name" in req.body && "address" in req.body)){
-            res.status(400).send("Invalid Request Body");
-            return;
-        }
-
-        if (req.body.id !== req.params.cid){
-            res.status(400).send("Mismatched Customer ID");
-            return;
-        }
+        // if (req.body.id !== req.params.id){
+        //     res.status(400).send("Mismatched Customer ID");
+        //     return;
+        // }
 
         const promise = new CustomerBO().updateCustomer(req.body);
         promise.then(status=>{

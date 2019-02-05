@@ -3,6 +3,8 @@ import {DAOTypes, getDAO} from "../dao/dao-factory";
 import {ItemDAO} from "../dao/custom/item-dao";
 import {ItemDTO} from "../dto/item-dto";
 import Promise = require("promise");
+import {CustomerDAO} from "../dao/custom/customer-dao";
+import cors=require("cors");
 
 export class ItemBO{
 
@@ -114,6 +116,23 @@ export class ItemBO{
                     });
                 }
             });
+        });
+    }
+    countItems():Promise<number>{
+        return new Promise((resolve, reject) => {
+            pool.getConnection((err, connection) =>{
+                if (err){
+                    reject(err);
+                } else {
+                    const itemDAO=<CustomerDAO>getDAO(DAOTypes.ITEM,connection );
+                    const promise=itemDAO.count();
+                    promise.then(count=>{
+                        resolve(count);
+                    }).catch(err => {
+                        reject(err);
+                    });
+                }
+            } );
         });
     }
 }

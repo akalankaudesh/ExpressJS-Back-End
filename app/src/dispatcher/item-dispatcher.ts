@@ -1,5 +1,7 @@
 import express=require("express");
 import {ItemBO} from "../business/item-bo";
+import cors=require("cors");
+
 import {CustomerBO} from "../business/customer-bo";
 
 const itemDispatcher=express.Router();
@@ -13,6 +15,19 @@ itemDispatcher.route("")
            res.status(500).send(error);
         });
     })
+
+    .head(cors({
+        exposedHeaders:['X-Count2']
+    }),(req, res) => {
+        const promise=new ItemBO().countItems();
+        promise.then(count => {
+            res.append("X-Count2",count+"");
+            res.sendStatus(200);
+        }).catch(err => {
+            res.status(500).send(err);
+        });
+    })
+
     .post((req, res) => {
         if (!("itemcode" in req.body && "description" in req.body && "unitprice" in req.body && "qty" in req.body)){
             res.status(400).send("Invalid Request Body");
